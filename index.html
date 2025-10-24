@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YudxzZ Image Editor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #00ffcc;
+            --secondary-color: #ff00ff;
+            --background-color: #1a1a2e;
+            --card-background: #16213e;
+            --text-color: #e0e0e0;
+            --input-bg: #2a2a4a;
+            --shadow-color: rgba(0, 255, 204, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+        }
+
+        /* --- Header & Logo --- */
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--background-color);
+            animation: rotateLogo 8s linear infinite, glow 2s ease-in-out infinite alternate;
+        }
+
+        .website-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+            animation: flicker 3s infinite alternate;
+        }
+
+        /* --- Main Content --- */
+        .container {
+            background-color: var(--card-background);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 700px;
+            border: 1px solid var(--primary-color);
+            animation: slideIn 1s ease-out;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px var(--shadow-color);
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* --- Result Section --- */
+        #result-container {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+            display: none; /* Initially hidden */
+        }
+
+        #result-image {
+            max-width: 100%;
+            border-radius: 15px;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 25px var(--shadow-color);
+            animation: fadeIn 1s;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #fff;
+            border-bottom-color: var(--primary-color);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        /* --- Animations --- */
+        @keyframes rotateLogo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--secondary-color); }
+            to { box-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--secondary-color); }
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow:
+                0 0 4px #fff,
+                0 0 11px var(--primary-color),
+                0 0 19px var(--primary-color),
+                0 0 40px var(--primary-color),
+                0 0 80px var(--primary-color);
+            }
+            20%, 24%, 55% {        
+                text-shadow: none;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Y</div>
+        <h1 class="website-title">YudxzZ Website</h1>
+    </header>
+
+    <div class="container">
+        <h2>AI Image Editor</h2>
+        <form id="editor-form">
+            <div class="form-group">
+                <label for="imageUrl">URL Gambar</label>
+                <input type="url" id="imageUrl" class="input-field" placeholder="https://example.com/image.jpg" required>
+            </div>
+            <div class="form-group">
+                <label for="prompt">Instruksi Edit (Prompt)</label>
+                <textarea id="prompt" class="input-field" placeholder="Contoh: Jadikan foto ini lebih sinematik" required></textarea>
+            </div>
+            <button type="submit" id="submit-button" class="submit-btn">Proses Gambar</button>
+        </form>
+    </div>
+
+    <div id="result-container">
+        <h2>Hasil Edit</h2>
+        <div id="loader-container" style="display: none;">
+            <div class="loader"></div>
+            <p style="margin-top: 1rem;">Sedang memproses, mohon tunggu...</p>
+        </div>
+        <img id="result-image" src="" alt="Hasil Gambar" style="display: none;">
+    </div>
+
+    <script>
+        const editorForm = document.getElementById('editor-form');
+        const imageUrlInput = document.getElementById('imageUrl');
+        const promptInput = document.getElementById('prompt');
+        const resultContainer = document.getElementById('result-container');
+        const resultImage = document.getElementById('result-image');
+        const submitButton = document.getElementById('submit-button');
+        const loaderContainer = document.getElementById('loader-container');
+
+        editorForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const imageUrl = imageUrlInput.value;
+            const prompt = promptInput.value;
+
+            if (!imageUrl || !prompt) {
+                alert('URL Gambar dan Prompt tidak boleh kosong!');
+                return;
+            }
+
+            // Menampilkan loader dan menyembunyikan gambar sebelumnya
+            resultContainer.style.display = 'block';
+            loaderContainer.style.display = 'block';
+            resultImage.style.display = 'none';
+            submitButton.disabled = true;
+            submitButton.textContent = 'Memproses...';
+
+            // Membuat URL API
+            const apiBaseUrl = 'https://api.zenzxz.my.id/api/maker/imagedit';
+            const encodedImageUrl = encodeURIComponent(imageUrl);
+            const encodedPrompt = encodeURIComponent(prompt);
+            
+            const apiUrl = `${apiBaseUrl}?url=${encodedImageUrl}&prompt=${encodedPrompt}`;
+
+            // Mengatur src gambar ke URL API
+            resultImage.src = apiUrl;
+
+            // Menangani event saat gambar berhasil dimuat atau gagal
+            resultImage.onload = function() {
+                loaderContainer.style.display = 'none';
+                resultImage.style.display = 'block';
+                submitButton.disabled = false;
+                submitButton.textContent = 'Proses Gambar';
+            };
+
+            resultImage.onerror = function() {
+                loaderContainer.style.display = 'none';
+                alert('Gagal memproses gambar. Pastikan URL gambar valid dan bisa diakses publik.');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Proses Gambar';
+                resultContainer.style.display = 'none';
+            };
+        });
+    </script>
+
+</body>
+</html>
